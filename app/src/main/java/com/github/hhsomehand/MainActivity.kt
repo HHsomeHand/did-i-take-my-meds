@@ -20,13 +20,27 @@ import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.extension.showToast
 import com.permissionx.guolindev.PermissionX
 import android.Manifest
+import android.content.res.Configuration
+import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import com.example.myapp.utils.NotificationUtils
+import com.github.hhsomehand.ui.RecordSection
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,11 +63,11 @@ class MainActivity : AppCompatActivity() {
         // enableEdgeToEdge()
         setContent {
             DiditakemymedsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(
+                    Modifier
+                        .fillMaxSize()
+                ) {
+                    HomeScreen()
                 }
             }
         }
@@ -61,8 +75,26 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun HomeScreen() {
+    Box(
+        Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 10.dp)
+        ) {
+            RecordSection()
+        }
+    }
+}
+
+@Composable
+fun Test(name: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+
+    var text by rememberSaveable { mutableStateOf("") }
     Column {
         Button(
             onClick = {
@@ -89,13 +121,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         ) {
             Text("发送消息提示")
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DiditakemymedsTheme {
-        Greeting("Android")
+        Spacer(Modifier.height(10.dp))
+
+        TextField(
+            value = text,
+            onValueChange = {
+                text = it
+            }
+        )
     }
 }
