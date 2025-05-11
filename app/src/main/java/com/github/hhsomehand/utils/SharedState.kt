@@ -8,6 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.github.hhsomehand.MyApplication
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+private const val TAG = "rememberSharedState"
 
 class SharedState<T>(
     private val key: String,
@@ -15,6 +19,7 @@ class SharedState<T>(
     private val context: Context = MyApplication.instance.applicationContext
 ) {
     private val prefs = context.getSharedPreferences("countdown_prefs", Context.MODE_PRIVATE)
+    private val gson = Gson()
 
     @Suppress("UNCHECKED_CAST")
     private var _value: T by mutableStateOf(
@@ -24,7 +29,19 @@ class SharedState<T>(
             is String -> prefs.getString(key, defaultValue) as T
             is Boolean -> prefs.getBoolean(key, defaultValue) as T
             is Float -> prefs.getFloat(key, defaultValue) as T
-            else -> defaultValue
+            else -> {
+                val json = prefs.getString(key, null)
+                if (json != null) {
+                    try {
+                        val type = object : TypeToken<T>() {}.type
+                        gson.fromJson(json, type) as T
+                    } catch (e: Exception) {
+                        defaultValue
+                    }
+                } else {
+                    defaultValue
+                }
+            }
         }
     )
 
@@ -39,7 +56,14 @@ class SharedState<T>(
                     is String -> putString(key, newValue)
                     is Boolean -> putBoolean(key, newValue)
                     is Float -> putFloat(key, newValue)
-                    else -> throw IllegalArgumentException("Unsupported type")
+                    else -> {
+                        try {
+                            val json = gson.toJson(newValue)
+                            putString(key, json)
+                        } catch (e: Exception) {
+                            LogUtils.e(TAG, "Failed to serialize value to JSON")
+                        }
+                    }
                 }
                 apply()
             }
