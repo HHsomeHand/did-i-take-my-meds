@@ -26,9 +26,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,6 +44,12 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import com.example.myapp.utils.NotificationUtils
 import com.github.hhsomehand.ui.RecordSection
+import com.github.hhsomehand.viewmodel.HomeViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.hhsomehand.model.MedRecord
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,8 +79,39 @@ class MainActivity : AppCompatActivity() {
                     Modifier
                         .fillMaxSize()
                 ) {
-                    HomeScreen()
+                    // HomeScreen()
+
+                    TestScreen()
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun TestScreen(viewModel: HomeViewModel = viewModel()) {
+    val list = viewModel.recordList
+
+    LaunchedEffect(Unit) {
+        viewModel.recordListAdd.collect {
+            withContext(Dispatchers.Main) {
+                "列表添加成功".showToast()
+            }
+        }
+    }
+
+    Column {
+        Button(
+            onClick = {
+                viewModel.addRecord(MedRecord(Date()))
+            }
+        ) {
+            Text("添加元素")
+        }
+
+        LazyColumn {
+            items(list) {
+                Text(it.date.toString())
             }
         }
     }
