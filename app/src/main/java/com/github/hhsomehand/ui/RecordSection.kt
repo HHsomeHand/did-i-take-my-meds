@@ -172,9 +172,10 @@ fun ShowRecordDialogContent() {
 
         Spacer(Modifier.height(Spacing.SMALL.value))
 
+        val columnPadding = 2.dp
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 2.dp, vertical = 2.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+            contentPadding = PaddingValues(columnPadding),
+            verticalArrangement = Arrangement.spacedBy(columnPadding),
             modifier = Modifier
                 .fillMaxSize()
                 .clip(MaterialTheme.shapes.small)
@@ -238,38 +239,43 @@ fun MedRecordDisplayer(
 ) {
     val date = medRecord.date
 
-    Row (
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 5.dp)
     ) {
-        Spacer(Modifier.width(6.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(Modifier.width(6.dp))
 
-        Text(
-            text = formatDate(date),
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier
-                .align(Alignment.Top)
-                .offset(y = 3.dp)
-        )
+            Text(
+                text = formatDate(date),
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .align(Alignment.Top)
+                    .offset(y = 3.dp)
+            )
 
-        Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(6.dp))
 
-        TimeNumberDisplayer(formatHour(date))
+            TimeNumberDisplayer(formatHour(date))
 
-        Spacer(Modifier.width(1.dp))
+            Spacer(Modifier.width(1.dp))
 
-        Text(
-            text = ":"
-        )
+            Text(
+                text = ":"
+            )
 
-        Spacer(Modifier.width(1.dp))
+            Spacer(Modifier.width(1.dp))
 
-        TimeNumberDisplayer(formatMinute(date))
+            TimeNumberDisplayer(formatMinute(date))
 
+        }
+
+        Spacer(Modifier.height(10.dp))
     }
 }
 
