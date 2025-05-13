@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonDefaults.outlinedButtonBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -38,12 +41,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.dialog.TimePickerDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
+import com.github.hhsomehand.ui.theme.MyPrimary
+import com.github.hhsomehand.ui.theme.MyPrimaryContainer
 import com.github.hhsomehand.ui.theme.Spacing
 import com.github.hhsomehand.utils.LogUtils
 import com.github.hhsomehand.viewmodel.HomeViewModel
@@ -132,11 +138,10 @@ fun RecordButton() {
         }
     }
 
-    OutlinedButton(
+    CornOutlinedButton(
         onClick = {
             viewModel.addRecord(MedRecord(LocalDateTime.now()))
         },
-        shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -149,11 +154,10 @@ fun ShowRecordButton() {
     val viewModel: HomeViewModel = viewModel()
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    OutlinedButton(
+    CornOutlinedButton(
         onClick = {
             isShowDialog = true
         },
-        shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -168,6 +172,26 @@ fun ShowRecordButton() {
     ) {
         ShowRecordDialogContent()
     }
+}
+
+@Composable
+fun CornOutlinedButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit
+) {
+    OutlinedButton(
+        onClick = onClick,
+        border = outlinedButtonBorder.copy(
+            brush = SolidColor(MyPrimaryContainer)
+        ),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = MyPrimary
+        ),
+        shape = MaterialTheme.shapes.small,
+        content = content,
+        modifier = modifier
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -340,7 +364,7 @@ fun TimeNumberDisplayer(text: String) {
         modifier = Modifier
             .size(30.dp)
             .clip(MaterialTheme.shapes.small)
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MyPrimary)
     ) {
         Text(
             text = text,
