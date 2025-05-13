@@ -2,21 +2,27 @@ package com.github.hhsomehand.ui
 
 import android.text.format.DateUtils.formatDateTime
 import android.widget.Button
+import android.widget.Space
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -36,6 +42,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -166,7 +173,8 @@ fun ShowRecordDialogContent() {
         Spacer(Modifier.height(Spacing.SMALL.value))
 
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 5.dp),
+            contentPadding = PaddingValues(horizontal = 2.dp, vertical = 2.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .clip(MaterialTheme.shapes.small)
@@ -228,24 +236,76 @@ fun MedRecordDisplayer(
     medRecord: MedRecord,
     modifier: Modifier = Modifier
 ) {
-    val fmt = formatDateTime(medRecord.date)
+    val date = medRecord.date
 
-    Text(
-        textAlign = TextAlign.Center,
-        text = fmt,
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-    )
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(vertical = 5.dp)
+    ) {
+        Spacer(Modifier.width(6.dp))
+
+        Text(
+            text = formatDate(date),
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier
+                .align(Alignment.Top)
+                .offset(y = 3.dp)
+        )
+
+        Spacer(Modifier.width(6.dp))
+
+        TimeNumberDisplayer(formatHour(date))
+
+        Spacer(Modifier.width(1.dp))
+
+        Text(
+            text = ":"
+        )
+
+        Spacer(Modifier.width(1.dp))
+
+        TimeNumberDisplayer(formatMinute(date))
+
+    }
 }
 
-fun formatDateTime(dateTime: LocalDateTime): String {
+@Composable
+fun TimeNumberDisplayer(text: String) {
+    Box(
+        modifier = Modifier
+            .size(30.dp)
+            .clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.primary)
+    ) {
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .align(Alignment.Center)
+        )
+    }
+}
+
+// 获取 今天 / 明天
+fun formatDate(dateTime: LocalDateTime): String {
     val today = LocalDate.now()
     val date = dateTime.toLocalDate()
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-    val timePart = dateTime.format(timeFormatter)
 
     return when (date) {
-        today -> "今天 $timePart"
-        today.minusDays(1) -> "昨天 $timePart"
-        else -> date.format(DateTimeFormatter.ofPattern("MM月dd日")) + " " + timePart
+        today -> "今天"
+        today.minusDays(1) -> "昨天"
+        else -> date.format(DateTimeFormatter.ofPattern("MM月dd日"))
     }
+}
+
+fun formatHour(dateTime: LocalDateTime): String {
+    return dateTime.hour.toString().padStart(2, '0')
+}
+
+fun formatMinute(dateTime: LocalDateTime): String {
+    return dateTime.minute.toString().padStart(2, '0')
 }
