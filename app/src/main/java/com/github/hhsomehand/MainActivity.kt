@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.github.hhsomehand.ui.theme.DiditakemymedsTheme
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.extension.showToast
 import com.permissionx.guolindev.PermissionX
@@ -47,8 +46,10 @@ import com.github.hhsomehand.ui.RecordSection
 import com.github.hhsomehand.viewmodel.HomeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.model.MedRecord
+import com.github.hhsomehand.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -74,14 +75,14 @@ class MainActivity : AppCompatActivity() {
 
         // enableEdgeToEdge()
         setContent {
-            DiditakemymedsTheme {
+            AppTheme {
                 Surface(
                     Modifier
                         .fillMaxSize()
                 ) {
-                    // HomeScreen()
+                    HomeScreen()
 
-                    TestScreen()
+                    // TestScreen()
                 }
             }
         }
@@ -103,7 +104,7 @@ fun TestScreen(viewModel: HomeViewModel = viewModel()) {
     Column {
         Button(
             onClick = {
-                viewModel.addRecord(MedRecord(Date()))
+                viewModel.addRecord(MedRecord(LocalDateTime.now()))
             }
         ) {
             Text("添加元素")

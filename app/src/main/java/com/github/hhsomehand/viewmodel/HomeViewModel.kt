@@ -9,6 +9,7 @@ import com.github.hhsomehand.utils.SharedState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class HomeViewModel: ViewModel() {
     private val _recordList: SnapshotStateList<MedRecord> = mutableStateListOf()
@@ -25,5 +26,23 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             _recordListAdd.emit(newRecord)
         }
+    }
+
+    fun updateRecord(
+        id: String,
+        hour: Int? = null,
+        minute: Int? = null,
+    ) {
+        val index = _recordList.indexOfFirst { it.id == id }
+
+        val date = _recordList[index].date
+
+        val updateDateTime = date
+            .withHour(hour ?: date.hour)
+            .withMinute(minute ?: date.minute)
+
+        _recordList[index] = _recordList[index].copy(
+            date = updateDateTime
+        )
     }
 }

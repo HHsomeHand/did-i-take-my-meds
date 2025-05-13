@@ -1,8 +1,9 @@
 package com.github.hhsomehand.model
 
-import java.util.Date
+import java.time.LocalDateTime
+import java.util.UUID
 
-class MedRecord(
-    val date: Date
-) {
-}
+data class MedRecord(
+    val date: LocalDateTime,
+    val id: String = UUID.randomUUID().toString(),
+)
