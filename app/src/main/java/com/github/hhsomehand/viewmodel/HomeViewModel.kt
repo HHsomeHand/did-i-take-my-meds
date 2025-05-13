@@ -28,6 +28,11 @@ class HomeViewModel: ViewModel() {
         }
     }
 
+    // 当数据更新的时候, 会传递更新的 index
+    private val _recordListUpdate = MutableSharedFlow<Int>()
+
+    val recordListUpdate = _recordListUpdate.asSharedFlow()
+
     fun updateRecord(
         id: String,
         hour: Int? = null,
@@ -44,5 +49,9 @@ class HomeViewModel: ViewModel() {
         _recordList[index] = _recordList[index].copy(
             date = updateDateTime
         )
+
+        viewModelScope.launch {
+            _recordListUpdate.emit(index)
+        }
     }
 }

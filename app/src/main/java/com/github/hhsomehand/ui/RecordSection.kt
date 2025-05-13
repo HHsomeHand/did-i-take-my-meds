@@ -1,8 +1,6 @@
 package com.github.hhsomehand.ui
 
-import android.text.format.DateUtils.formatDateTime
-import android.widget.Button
-import android.widget.Space
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -22,21 +20,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,24 +38,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.dialog.TimePickerDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
-import com.github.hhsomehand.ui.theme.MyLightGray
-import com.github.hhsomehand.ui.theme.MyWhite
 import com.github.hhsomehand.ui.theme.Spacing
-import com.github.hhsomehand.utils.rememberSharedState
+import com.github.hhsomehand.utils.LogUtils
 import com.github.hhsomehand.viewmodel.HomeViewModel
-import toTimestamp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
+
+private const val TAG = "RecordSection"
 
 @Composable
 fun RecordSection() {
@@ -79,14 +76,71 @@ fun RecordSection() {
 fun RecordButton() {
     val viewModel: HomeViewModel = viewModel()
 
-    Button(
+    // 时间间隔的格式化字符串
+    var diffFmt by rememberSaveable { mutableStateOf("") }
+
+    // 更新时间间隔的字符串
+    suspend fun updateDiffFmt() {
+        val newestRecord = viewModel.recordList.maxByOrNull { it.date }
+
+        while (newestRecord != null) {
+            val duration = Duration.between(newestRecord.date, LocalDateTime.now())
+
+            val hourFmt = if (duration.toHours() != 0L) {
+                String.format("%d小时", duration.toHours())
+            } else {
+                ""
+            }
+
+            // 在 1 小时 0 分钟的时候, 显示 1 小时, 不显示 0 分钟
+            val minFmt = if (duration.toHours() > 0L && duration.toMinutes() == 0L) {
+                ""
+            } else {
+                String.format("%d分钟", duration.toMinutes())
+            }
+
+            val diffStr = hourFmt + minFmt
+
+            diffFmt = if (diffStr != "") {
+                "（用药间隔约$diffStr）"
+            } else {
+                ""
+            }
+
+            delay(1000 * 60)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        var currentJob: Job? = null
+
+        currentJob = launch {
+            updateDiffFmt()
+        }
+
+        merge(
+            viewModel.recordListAdd,
+            viewModel.recordListUpdate
+        ).collect {
+            // 取消当前正在执行的任务
+            currentJob?.cancel()
+
+            // 启动新任务
+            currentJob = launch {
+                updateDiffFmt()
+            }
+        }
+    }
+
+    OutlinedButton(
         onClick = {
             viewModel.addRecord(MedRecord(LocalDateTime.now()))
         },
+        shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Text("记录服药")
+        Text("记录服药$diffFmt")
     }
 }
 
@@ -95,10 +149,11 @@ fun ShowRecordButton() {
     val viewModel: HomeViewModel = viewModel()
     var isShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    Button(
+    OutlinedButton(
         onClick = {
             isShowDialog = true
         },
+        shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -244,7 +299,7 @@ fun MedRecordDisplayer(
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
             .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 5.dp)
+            .padding(vertical = 8.dp)
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
@@ -275,7 +330,7 @@ fun MedRecordDisplayer(
 
         }
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(12.dp))
     }
 }
 
