@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.github.hhsomehand.MyApplication
+import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.dao.RecordStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,20 +18,26 @@ class MedicationReminderWorker(
 ) : CoroutineWorker(context, params) {
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences("MedNotificationSection", Context.MODE_PRIVATE)
+        context.getSharedPreferences(PrefsConst.appStoreName, Context.MODE_PRIVATE)
     private val recordStorage = RecordStorage(context)
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
             // 检查是否启用通知
-            val isNotificationEnabled = sharedPreferences.getBoolean("isNotification", false)
+            // val isNotificationEnabled = sharedPreferences.getBoolean("MedNotificationSection.isNotification", true)
+            val isNotificationEnabled = sharedPreferences.getBoolean(PrefsConst.isNotificationKey, PrefsConst.isNotificationDefault)
             if (!isNotificationEnabled) {
+                android.util.Log.d("MedicationReminderWorker", "没开允许通知")
+
                 return@withContext Result.success()
             }
 
             // 获取提醒间隔小时数
-            val hourInterval = sharedPreferences.getInt("hourInput", 4) // 默认4小时
+            // val hourInterval = sharedPreferences.getInt("MedNotificationSection.hourInput", 4)
+            val hourInterval = sharedPreferences.getInt(PrefsConst.hourInputKey, PrefsConst.hourInputDefault) // 默认4小时
             if (hourInterval <= 0) {
+                android.util.Log.d("MedicationReminderWorker", "没到需要提醒的时间")
+
                 return@withContext Result.success()
             }
 
@@ -91,5 +98,24 @@ class MedicationReminderWorker(
         fun cancelWork(context: Context = MyApplication.instance.applicationContext) {
             androidx.work.WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
         }
+
+        // 测试 WorkManager 内部逻辑是否正常, 10 秒后运行
+        fun testRunOnce(context: Context = MyApplication.instance.applicationContext) {
+            val workManager = androidx.work.WorkManager.getInstance(context)
+
+            val testRequest = androidx.work.OneTimeWorkRequestBuilder<MedicationReminderWorker>()
+                .setInitialDelay(2, java.util.concurrent.TimeUnit.SECONDS) // 延迟10秒执行
+                .setConstraints(
+                    androidx.work.Constraints.Builder()
+                        .setRequiredNetworkType(androidx.work.NetworkType.NOT_REQUIRED)
+                        .build()
+                )
+                .build()
+
+            workManager.enqueue(testRequest)
+
+            android.util.Log.d("MedicationReminderWorker", "Test OneTimeWorkRequest enqueued (delay 10s)")
+        }
+
     }
 }

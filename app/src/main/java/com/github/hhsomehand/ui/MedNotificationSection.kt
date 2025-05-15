@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.ui.component.CornNumberField
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
@@ -19,9 +20,12 @@ import com.github.hhsomehand.viewmodel.HomeViewModel
 
 @Composable
 fun MedNotificationSection() {
-    var hourInput by rememberSharedState("MedNotificationSection.hourInput", 4)
+    // var hourInput by rememberSharedState("MedNotificationSection.hourInput", 4)
+    var hourInput by rememberSharedState(PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
 
-    var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
+
+    // var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
+    var isNotification by rememberSharedState(PrefsConst.isNotificationKey, PrefsConst.isNotificationDefault)
 
     LaunchedEffect(isNotification) {
         if (isNotification) {

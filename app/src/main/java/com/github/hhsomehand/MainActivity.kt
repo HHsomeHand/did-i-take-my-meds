@@ -48,6 +48,7 @@ import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.BrushAlarmSection
 import com.github.hhsomehand.ui.MedNotificationSection
 import com.github.hhsomehand.ui.theme.AppTheme
+import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.NotificationUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -136,6 +137,12 @@ fun HomeScreen() {
             MedNotificationSection()
 
             BrushAlarmSection()
+
+//            Button(
+//                onClick = { MedicationReminderWorker.testRunOnce() }
+//            ) {
+//                Text("测试 workManager")
+//            }
         }
     }
 }

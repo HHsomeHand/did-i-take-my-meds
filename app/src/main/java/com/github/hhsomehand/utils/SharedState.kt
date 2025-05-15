@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import com.github.hhsomehand.MyApplication
+import com.github.hhsomehand.constant.PrefsConst
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlin.properties.ReadWriteProperty
@@ -19,7 +20,7 @@ fun <T> sharedState(
     defaultValue: T,
     context: Context = MyApplication.instance.applicationContext
 ): SharedState<T> {
-    val prefs = context.getSharedPreferences("countdown_prefs", Context.MODE_PRIVATE)
+    val prefs = context.getSharedPreferences(PrefsConst.appStoreName, Context.MODE_PRIVATE)
 
     @Suppress("UNCHECKED_CAST")
     val state = mutableStateOf(
