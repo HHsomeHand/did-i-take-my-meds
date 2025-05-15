@@ -47,6 +47,7 @@ import com.github.hhsomehand.viewmodel.HomeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.BrushAlarmSection
+import com.github.hhsomehand.ui.MedNotificationSection
 import com.github.hhsomehand.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -131,6 +132,8 @@ fun HomeScreen() {
                 .padding(horizontal = 25.dp)
         ) {
             RecordSection()
+
+            MedNotificationSection()
 
             BrushAlarmSection()
         }
