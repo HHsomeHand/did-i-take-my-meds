@@ -98,11 +98,17 @@ fun RecordButton() {
                 ""
             }
 
+            var durationMin = duration.toMinutes() - duration.toHours() * 60
+
+            if (durationMin < 0) {
+                durationMin = 0 // 不会到这里
+            }
+
             // 在 1 小时 0 分钟的时候, 显示 1 小时, 不显示 0 分钟
-            val minFmt = if (duration.toHours() > 0L && duration.toMinutes() == 0L) {
+            val minFmt = if (duration.toHours() > 0L && durationMin == 0L) {
                 ""
             } else {
-                String.format("%d分钟", duration.toMinutes())
+                String.format("%d分钟", durationMin)
             }
 
             val diffStr = hourFmt + minFmt
