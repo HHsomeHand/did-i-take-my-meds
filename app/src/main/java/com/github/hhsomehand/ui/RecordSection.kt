@@ -126,7 +126,8 @@ fun RecordButton() {
 
         merge(
             viewModel.recordListAdd,
-            viewModel.recordListUpdate
+            viewModel.recordListUpdate,
+            viewModel.recordListInit
         ).collect {
             // 取消当前正在执行的任务
             currentJob?.cancel()

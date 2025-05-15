@@ -40,12 +40,29 @@ class HomeViewModel: ViewModel() {
 
     val recordListUpdate = _recordListUpdate.asSharedFlow()
 
+    private val _recordListInit = MutableSharedFlow<Unit>()
+
+    val recordListInit = _recordListInit.asSharedFlow()
+
+
     init {
         viewModelScope.launch {
             val newList: List<MedRecord> = recordStorage.getRecordList()
 
+            fun filterLast24Hours(records: List<MedRecord>): List<MedRecord> {
+                val now = LocalDateTime.now()
+                val twentyFourHoursAgo = now.minusHours(24)
+                return records.filter { it.date.isAfter(twentyFourHoursAgo) && it.date.isBefore(now) }
+            }
+
+            val filterNewList = filterLast24Hours(newList)
+
+            recordStorage.storeRecordList(filterNewList)
+
             _recordList.clear()
-            _recordList.addAll(newList)
+            _recordList.addAll(filterNewList)
+
+            _recordListInit.emit(Unit)
 
             merge(
                 recordListAdd,
