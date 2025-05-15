@@ -1,4 +1,4 @@
-package com.example.myapp.utils
+package com.github.hhsomehand.utils
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel

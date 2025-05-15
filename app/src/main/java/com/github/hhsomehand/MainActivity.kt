@@ -41,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
-import com.example.myapp.utils.NotificationUtils
 import com.github.hhsomehand.ui.RecordSection
 import com.github.hhsomehand.viewmodel.HomeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +48,7 @@ import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.BrushAlarmSection
 import com.github.hhsomehand.ui.MedNotificationSection
 import com.github.hhsomehand.ui.theme.AppTheme
+import com.github.hhsomehand.utils.NotificationUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
