@@ -1,17 +1,24 @@
 package com.github.hhsomehand.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.hhsomehand.dao.RecordStorage
 import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.utils.SharedState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
+private const val TAG = "HomeViewModel"
+
 class HomeViewModel: ViewModel() {
+    private val recordStorage: RecordStorage = RecordStorage()
+
     private val _recordList: SnapshotStateList<MedRecord> = mutableStateListOf()
 
     val recordList: List<MedRecord> = _recordList
@@ -32,6 +39,22 @@ class HomeViewModel: ViewModel() {
     private val _recordListUpdate = MutableSharedFlow<Int>()
 
     val recordListUpdate = _recordListUpdate.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            val newList: List<MedRecord> = recordStorage.getRecordList()
+
+            _recordList.clear()
+            _recordList.addAll(newList)
+
+            merge(
+                recordListAdd,
+                recordListUpdate
+            ).collect {
+                recordStorage.storeRecordList(recordList)
+            }
+        }
+    }
 
     fun updateRecord(
         id: String,
