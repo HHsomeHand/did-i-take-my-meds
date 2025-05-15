@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.ui.component.CornNumberField
 import com.github.hhsomehand.utils.AlarmUtils
+import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
 
@@ -21,6 +22,14 @@ fun MedNotificationSection() {
     var hourInput by rememberSharedState("MedNotificationSection.hourInput", 4)
 
     var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
+
+    LaunchedEffect(isNotification) {
+        if (isNotification) {
+            MedicationReminderWorker.scheduleWork()
+        } else {
+            MedicationReminderWorker.cancelWork()
+        }
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
