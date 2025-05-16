@@ -12,6 +12,11 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
+/**
+ * 注意! 不要使用本功能, 因为在国产的 OS 上, 工作不正常, 要用前台 Service
+ *
+ * 就算关闭了省电模式, 和赋予了后台启动权限, 依旧工作不正常
+ */
 class MedicationReminderWorker(
     context: Context,
     params: WorkerParameters

@@ -134,7 +134,7 @@ fun HomeScreen() {
         ) {
             RecordSection()
 
-            MedNotificationSection()
+            // MedNotificationSection()
 
             BrushAlarmSection()
 
