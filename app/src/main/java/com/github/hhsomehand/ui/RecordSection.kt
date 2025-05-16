@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.hhsomehand.dao.RecordStorage
 import com.github.hhsomehand.model.MedRecord
 import com.github.hhsomehand.ui.dialog.TimePickerDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
@@ -89,32 +90,13 @@ fun RecordButton() {
     suspend fun updateDiffFmt() {
         val newestRecord = viewModel.recordList.maxByOrNull { it.date }
 
+        val recordStorage = RecordStorage()
+
         while (newestRecord != null) {
-            val duration = Duration.between(newestRecord.date, LocalDateTime.now())
+            val tmpDiffFmt = recordStorage.getTimeDiffFmt()
 
-            val hourFmt = if (duration.toHours() != 0L) {
-                String.format("%d小时", duration.toHours())
-            } else {
-                ""
-            }
-
-            var durationMin = duration.toMinutes() - duration.toHours() * 60
-
-            if (durationMin < 0) {
-                durationMin = 0 // 不会到这里
-            }
-
-            // 在 1 小时 0 分钟的时候, 显示 1 小时, 不显示 0 分钟
-            val minFmt = if (duration.toHours() > 0L && durationMin == 0L) {
-                ""
-            } else {
-                String.format("%d分钟", durationMin)
-            }
-
-            val diffStr = hourFmt + minFmt
-
-            diffFmt = if (diffStr != "") {
-                "（用药间隔约$diffStr）"
+            diffFmt = if (tmpDiffFmt != "") {
+                "（${tmpDiffFmt}）"
             } else {
                 ""
             }
