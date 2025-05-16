@@ -20,32 +20,19 @@ import com.github.hhsomehand.viewmodel.HomeViewModel
 
 @Composable
 fun MedNotificationSection() {
-    // var hourInput by rememberSharedState("MedNotificationSection.hourInput", 4)
-    var hourInput by rememberSharedState(PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
-
-
     // var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
     var isNotification by rememberSharedState(PrefsConst.isNotificationKey, PrefsConst.isNotificationDefault)
 
     LaunchedEffect(isNotification) {
         if (isNotification) {
-            MedicationReminderWorker.scheduleWork()
         } else {
-            MedicationReminderWorker.cancelWork()
         }
     }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "吃药后, 隔")
-
-        CornNumberField(
-            value = hourInput,
-            onValueChange = { hourInput = it },
-
-        )
-        Text(text = "个小时, 提醒吃药")
+        Text(text = "显示吃药间隔的通知")
 
         Box(
             modifier = Modifier
