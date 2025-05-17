@@ -52,6 +52,13 @@ class MedicineReminderService : Service() {
                 context.startService(intent) // 非前台服务使用 startService
             }
         }
+
+        fun stopService(
+            context: Context = MyApplication.instance.applicationContext
+        ) {
+            val intent = Intent(context, MedicineReminderService::class.java)
+            context.stopService(intent)
+        }
     }
 
     override fun onCreate() {
