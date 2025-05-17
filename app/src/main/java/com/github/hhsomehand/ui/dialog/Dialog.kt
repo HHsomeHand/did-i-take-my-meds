@@ -25,11 +25,16 @@ import com.github.hhsomehand.ui.theme.MyWhite
 import java.time.LocalDateTime
 
 @Composable
-fun getDialogBoxModifier(): Modifier {
-    return Modifier
+fun getDialogModifier(modifier: Modifier = Modifier): Modifier {
+    return modifier
         .clip(MaterialTheme.shapes.large)
         .background(MaterialTheme.colorScheme.surface)
         .padding(15.dp)
+}
+
+@Composable
+fun getDialogBoxModifier(modifier: Modifier = Modifier): Modifier {
+    return getDialogModifier(modifier)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,5 +71,21 @@ fun TimePickerDialog(
                 }
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CornDialog(
+    isShowDialog: Boolean,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(isShowDialog) {
+        BasicAlertDialog(
+            onDismissRequest = onDismiss,
+            content = content
+        )
     }
 }
