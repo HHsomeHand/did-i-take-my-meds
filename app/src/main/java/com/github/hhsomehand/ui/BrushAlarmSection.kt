@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.ui.component.CornNumberField
+import com.github.hhsomehand.ui.theme.ConfigRowHeight
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
@@ -39,7 +40,8 @@ fun BrushAlarmSection() {
     }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
     ) {
         Text(text = "吃药后, 隔")
 

@@ -17,6 +17,7 @@ import com.github.hhsomehand.MyApplication
 import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.service.MedicineReminderService
 import com.github.hhsomehand.ui.component.CornNumberField
+import com.github.hhsomehand.ui.theme.ConfigRowHeight
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.rememberSharedState
@@ -29,6 +30,8 @@ fun MedNotificationSection() {
 
     var isForeground by rememberSharedState(PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
 
+    var hourInput by rememberSharedState(PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
+
     val context = LocalContext.current
     LaunchedEffect(isNotification) {
         if (isNotification) {
@@ -37,16 +40,16 @@ fun MedNotificationSection() {
 
         } else {
 
-            val intent = Intent(context, MedicineReminderService::class.java)
-            context.stopService(intent)
+            MedicineReminderService.stopService()
 
         }
     }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
     ) {
-        Text(text = "显示吃药间隔的通知")
+        Text(text = "通过发消息通知来提醒吃药")
 
         Box(
             modifier = Modifier
@@ -62,9 +65,10 @@ fun MedNotificationSection() {
     }
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
     ) {
-        Text(text = "是否启动前台服务")
+        Text(text = "是否启动前台服务来发通知")
 
         Box(
             modifier = Modifier
@@ -77,5 +81,19 @@ fun MedNotificationSection() {
                     .align(Alignment.CenterEnd)
             )
         }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        Text(text = "吃药后, 隔")
+
+        CornNumberField(
+            value = hourInput,
+            onValueChange = { hourInput = it },
+
+            )
+        Text(text = "个小时, 提醒吃药")
     }
 }
