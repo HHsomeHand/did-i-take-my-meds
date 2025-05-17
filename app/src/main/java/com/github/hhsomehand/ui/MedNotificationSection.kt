@@ -32,6 +32,8 @@ fun MedNotificationSection() {
 
     var hourInput by rememberSharedState(PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
 
+    var minToCheck by rememberSharedState(PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
+
     val context = LocalContext.current
     LaunchedEffect(isNotification) {
         if (isNotification) {
@@ -92,8 +94,22 @@ fun MedNotificationSection() {
         CornNumberField(
             value = hourInput,
             onValueChange = { hourInput = it },
-
             )
+
         Text(text = "个小时, 提醒吃药")
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        Text(text = "每隔")
+
+        CornNumberField(
+            value = minToCheck,
+            onValueChange = { minToCheck = it },
+            )
+
+        Text(text = "分钟, 检查是否超时")
     }
 }

@@ -14,5 +14,6 @@ object PrefsConst {
     const val isForegroundKey = "MedNotificationSection.isForeground"
     const val isForegroundValue = false
 
-
+    const val minToCheckKey = "MedNotificationSection.minToCheck"
+    const val minToCheckValue = 5
 }

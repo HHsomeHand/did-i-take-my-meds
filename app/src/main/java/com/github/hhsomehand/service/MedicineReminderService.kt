@@ -115,7 +115,9 @@ class MedicineReminderService : Service() {
 
                 checkAndNotify()
 
-                delay(CHECK_INTERVAL_MS)
+                val minToCheck = getMinToCheck()
+
+                delay(minToCheck * 60 * 1000L)
             }
         }
     }
@@ -188,6 +190,8 @@ class MedicineReminderService : Service() {
     fun getIsForeground(): Boolean = PrefsUtils.get(this, PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
 
     fun getHourInput(): Int = PrefsUtils.get(this, PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
+
+    fun getMinToCheck(): Int = PrefsUtils.get(this, PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null // 不支持绑定
