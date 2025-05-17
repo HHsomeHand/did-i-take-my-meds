@@ -1,5 +1,7 @@
 package com.github.hhsomehand.constant
 
+import android.content.Context
+
 object PrefsConst {
     const val appStoreName = "app"
 
@@ -8,4 +10,9 @@ object PrefsConst {
 
     const val isNotificationKey = "MedNotificationSection.isNotification"
     const val isNotificationDefault = true
+
+    const val isForegroundKey = "MedNotificationSection.isForeground"
+    const val isForegroundValue = false
+
+
 }

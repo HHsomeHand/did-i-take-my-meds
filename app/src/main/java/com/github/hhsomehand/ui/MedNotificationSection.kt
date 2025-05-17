@@ -27,14 +27,19 @@ fun MedNotificationSection() {
     // var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
     var isNotification by rememberSharedState(PrefsConst.isNotificationKey, PrefsConst.isNotificationDefault)
 
+    var isForeground by rememberSharedState(PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
+
     val context = LocalContext.current
     LaunchedEffect(isNotification) {
         if (isNotification) {
-            val intent = Intent(context, MedicineReminderService::class.java)
-            startForegroundService(context, intent)
+
+            MedicineReminderService.startService(isForeground)
+
         } else {
+
             val intent = Intent(context, MedicineReminderService::class.java)
             context.stopService(intent)
+
         }
     }
 
@@ -50,6 +55,24 @@ fun MedNotificationSection() {
             Switch(
                 checked = isNotification,
                 onCheckedChange = { isNotification = it },
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+            )
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = "是否启动前台服务")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Switch(
+                checked = isForeground,
+                onCheckedChange = { isForeground = it },
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
             )
