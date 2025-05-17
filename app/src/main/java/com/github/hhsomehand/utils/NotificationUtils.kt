@@ -79,4 +79,54 @@ object NotificationUtils {
             notify(notificationId, builder.build())
         }
     }
+
+    // 用于用药提醒的固定通知ID
+    private const val REMINDER_NOTIFICATION_ID = 1002
+
+    // 发送单例通知（替换之前的提醒）
+    @SuppressLint("MissingPermission")
+    fun sendSingleNotification(
+        title: String,
+        message: String,
+        targetActivity: Class<*> = MainActivity::class.java,
+        context: Context = MyApplication.instance.applicationContext,
+    ) {
+        if (!isInit) {
+            LogUtils.e(logTag, "使用 sendNotification 前, 请先调用 initNotificationChannel 进行初始化")
+            return
+        }
+
+        // 先取消之前的通知
+        cancelReminderNotification(context)
+
+        val intent = Intent(context, targetActivity).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setOnlyAlertOnce(true) // 只在第一次显示时提醒（震动、声音）
+
+        with(NotificationManagerCompat.from(context)) {
+            notify(REMINDER_NOTIFICATION_ID, builder.build())
+        }
+    }
+
+    // 取消用药提醒通知
+    fun cancelReminderNotification(context: Context) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(REMINDER_NOTIFICATION_ID)
+    }
 }
