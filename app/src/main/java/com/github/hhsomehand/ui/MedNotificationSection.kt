@@ -22,6 +22,7 @@ import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
+import com.judemanutd.autostarter.AutoStartPermissionHelper
 
 @Composable
 fun MedNotificationSection() {
@@ -111,5 +112,15 @@ fun MedNotificationSection() {
             )
 
         Text(text = "分钟, 检查是否超时")
+    }
+
+    CornOutlinedButton(
+        onClick = {
+            AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text("打开自启动设置")
     }
 }

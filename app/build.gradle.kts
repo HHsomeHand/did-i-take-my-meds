@@ -39,7 +39,7 @@ android {
     }
 }
 
-dependencies {
+dependencies({
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -64,4 +64,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.1")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
-}
+
+    implementation("com.github.judemanutd:autostarter:1.1.0")
+})
