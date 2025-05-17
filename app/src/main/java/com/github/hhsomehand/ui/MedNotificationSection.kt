@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +34,7 @@ import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.openUrl
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
-import com.github.javiersantos.appupdater.AppUpdater
-import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.github.javiersantos.appupdater.enums.Display
 
 @Composable
 fun MedNotificationSection() {
@@ -154,6 +152,16 @@ fun MedNotificationSection() {
                 Text(text = "分钟, 检查是否超时")
             }
 
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = ConfigRowHeight
+            ) {
+                SelectionContainer {
+                    Text("加 QQ 群获取版本更新: 1038206078")
+                }
+
+            }
+
             CornOutlinedButton(
                 onClick = {
                     AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
@@ -183,20 +191,6 @@ fun MedNotificationSection() {
                     .fillMaxWidth()
             ) {
                 Text("英文说明书 & 开源地址")
-            }
-
-            CornOutlinedButton(
-                onClick = {
-                    AppUpdater(context)
-                        .setDisplay(Display.DIALOG)
-                        .setUpdateFrom(UpdateFrom.GITHUB)
-                        .setGitHubUserAndRepo("HHsomeHand", "did-i-take-my-meds")
-                        .start()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text("从 GITHUB 检查更新")
             }
         }
     }

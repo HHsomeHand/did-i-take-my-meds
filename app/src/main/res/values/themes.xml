@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Diditakemymeds" parent="Theme.AppCompat.NoActionBar" />
+    <style name="Theme.Diditakemymeds" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">
+            #faf9ff
+        </item>
+    </style>
 </resources>
