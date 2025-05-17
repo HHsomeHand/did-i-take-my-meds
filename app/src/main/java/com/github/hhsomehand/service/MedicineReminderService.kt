@@ -37,7 +37,6 @@ class MedicineReminderService : Service() {
 
     companion object {
         private const val NOTIFICATION_ID = 1001
-        private const val REMINDER_INTERVAL_MINUTES = 4 * 60 // 4小时
         private const val CHECK_INTERVAL_MS = 5 * 60 * 1000L // 每5分钟检查一次
 
         fun startService(
@@ -109,7 +108,7 @@ class MedicineReminderService : Service() {
 
                 checkAndNotify()
 
-                delay(1000 * 10)
+                delay(CHECK_INTERVAL_MS)
             }
         }
     }
@@ -124,14 +123,22 @@ class MedicineReminderService : Service() {
                     return@withContext
                 }
 
-                val latestRecord = records.maxByOrNull { it.date } ?: return@withContext
-                val minutesSinceLastDose = ChronoUnit.MINUTES.between(latestRecord.date, LocalDateTime.now())
-                val timeDiffFmt = recordStorage.getTimeDiffFmt()
+                val latestRecord = records.maxByOrNull { it.date }
 
-                LogUtils.d(TAG, "上次用药时间: $minutesSinceLastDose 分钟前")
+                if (latestRecord == null) {
+                    LogUtils.d(TAG, "没有用药记录")
+                    return@withContext
+                }
 
-                if (minutesSinceLastDose >= REMINDER_INTERVAL_MINUTES) {
+                val hoursSinceLastDose = ChronoUnit.HOURS.between(latestRecord.date, LocalDateTime.now())
+
+                LogUtils.d(TAG, "检查结果: 上次用药时间: $hoursSinceLastDose 小时前")
+
+                if (hoursSinceLastDose >= getHourInput()) {
                     LogUtils.d(TAG, "需要提醒用药")
+
+                    val timeDiffFmt = recordStorage.getTimeDiffFmt()
+
                     NotificationUtils.sendSingleNotification(
                         title = "用药提醒",
                         message = "距离上次用药已过去${timeDiffFmt}，请考虑服药！",
@@ -172,6 +179,8 @@ class MedicineReminderService : Service() {
     }
 
     fun getIsForeground(): Boolean = PrefsUtils.get(this, PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
+
+    fun getHourInput(): Int = PrefsUtils.get(this, PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null // 不支持绑定
