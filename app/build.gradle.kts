@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.github.hhsomehand"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -39,7 +39,7 @@ android {
     }
 }
 
-dependencies {
+dependencies({
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,4 +58,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
+
+    implementation("com.guolindev.permissionx:permissionx:1.8.1")
+
+    implementation("com.google.code.gson:gson:2.13.1")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
+
+    implementation("com.github.judemanutd:autostarter:1.1.0")
+
+    implementation("com.github.javiersantos:AppUpdater:2.7")
+
+
+})

@@ -1,0 +1,203 @@
+package com.github.hhsomehand.ui
+
+import android.content.Intent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startForegroundService
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.hhsomehand.MyApplication
+import com.github.hhsomehand.constant.PrefsConst
+import com.github.hhsomehand.service.MedicineReminderService
+import com.github.hhsomehand.ui.component.CornNumberField
+import com.github.hhsomehand.ui.dialog.CornDialog
+import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
+import com.github.hhsomehand.ui.dialog.getDialogModifier
+import com.github.hhsomehand.ui.theme.ConfigRowHeight
+import com.github.hhsomehand.utils.AlarmUtils
+import com.github.hhsomehand.utils.MedicationReminderWorker
+import com.github.hhsomehand.utils.openUrl
+import com.github.hhsomehand.utils.rememberSharedState
+import com.github.hhsomehand.viewmodel.HomeViewModel
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.UpdateFrom
+import com.judemanutd.autostarter.AutoStartPermissionHelper
+import com.github.javiersantos.appupdater.enums.Display
+
+@Composable
+fun MedNotificationSection() {
+    // var isNotification by rememberSharedState("MedNotificationSection.isNotification", true)
+    var isNotification by rememberSharedState(PrefsConst.isNotificationKey, PrefsConst.isNotificationDefault)
+
+    var isForeground by rememberSharedState(PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
+
+    var hourInput by rememberSharedState(PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
+
+    var minToCheck by rememberSharedState(PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
+
+    val context = LocalContext.current
+    LaunchedEffect(isNotification) {
+        if (isNotification) {
+
+            MedicineReminderService.startService(isForeground)
+
+        } else {
+
+            MedicineReminderService.stopService()
+
+        }
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        Text(text = "通过消息通知来提醒吃药")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Switch(
+                checked = isNotification,
+                onCheckedChange = { isNotification = it },
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+            )
+        }
+    }
+
+    var isShowDialog by rememberSaveable { mutableStateOf(false) }
+
+    CornOutlinedButton(
+        onClick = {
+            isShowDialog = true
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text("高级设置")
+    }
+
+    CornDialog(
+        isShowDialog = isShowDialog,
+        onDismiss = {
+            isShowDialog = false
+        }
+    ) {
+        Column(
+            modifier = getDialogModifier(
+                Modifier
+                    .fillMaxWidth()
+            )
+
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = ConfigRowHeight
+            ) {
+                Text(text = "是否启动前台服务来发通知")
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Switch(
+                        checked = isForeground,
+                        onCheckedChange = { isForeground = it },
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = ConfigRowHeight
+            ) {
+                Text(text = "吃药后, 隔")
+
+                CornNumberField(
+                    value = hourInput,
+                    onValueChange = { hourInput = it },
+                )
+
+                Text(text = "个小时, 提醒吃药")
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = ConfigRowHeight
+            ) {
+                Text(text = "每隔")
+
+                CornNumberField(
+                    value = minToCheck,
+                    onValueChange = { minToCheck = it },
+                )
+
+                Text(text = "分钟, 检查是否超时")
+            }
+
+            CornOutlinedButton(
+                onClick = {
+                    AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("打开自启动设置")
+            }
+
+            CornOutlinedButton(
+                onClick = {
+                    openUrl("https://gitee.com/HHandHsome/did-i-take-my-meds")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("中文说明书 & 开源地址")
+            }
+
+
+            CornOutlinedButton(
+                onClick = {
+                    openUrl("https://github.com/HHsomeHand/did-i-take-my-meds")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("英文说明书 & 开源地址")
+            }
+
+            CornOutlinedButton(
+                onClick = {
+                    AppUpdater(context)
+                        .setDisplay(Display.DIALOG)
+                        .setUpdateFrom(UpdateFrom.GITHUB)
+                        .setGitHubUserAndRepo("HHsomeHand", "did-i-take-my-meds")
+                        .start()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("从 GITHUB 检查更新")
+            }
+        }
+    }
+}
