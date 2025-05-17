@@ -30,6 +30,7 @@ import com.github.hhsomehand.ui.dialog.getDialogModifier
 import com.github.hhsomehand.ui.theme.ConfigRowHeight
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
+import com.github.hhsomehand.utils.openUrl
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
 import com.judemanutd.autostarter.AutoStartPermissionHelper
@@ -158,6 +159,27 @@ fun MedNotificationSection() {
                     .fillMaxWidth()
             ) {
                 Text("打开自启动设置")
+            }
+
+            CornOutlinedButton(
+                onClick = {
+                    openUrl("https://gitee.com/HHandHsome/did-i-take-my-meds")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("中文说明书 & 开源地址")
+            }
+
+
+            CornOutlinedButton(
+                onClick = {
+                    openUrl("https://github.com/HHsomeHand/did-i-take-my-meds")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("英文说明书 & 开源地址")
             }
         }
     }
