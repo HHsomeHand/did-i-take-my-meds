@@ -324,7 +324,7 @@ fun MedRecordDisplayer(
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
                     .align(Alignment.Top)
-                    .offset(y = 3.dp)
+                    .offset(y = 5.dp)
             )
 
             Spacer(Modifier.width(6.dp))
