@@ -134,9 +134,9 @@ fun HomeScreen() {
         ) {
             RecordSection()
 
-            MedNotificationSection()
-
             BrushAlarmSection()
+
+            MedNotificationSection()
 
 //            Button(
 //                onClick = { MedicationReminderWorker.testRunOnce() }
