@@ -17,10 +17,11 @@ import java.util.UUID
 
 object NotificationUtils {
     private const val logTag = "sendNotification"
-    private var isInit = false
-    private const val CHANNEL_ID = "default_channel"
-    private const val CHANNEL_NAME = "Default Notifications"
-    private const val CHANNEL_DESCRIPTION = "General notifications for the app"
+    var isInit = false
+        private set
+    const val CHANNEL_ID = "default_channel"
+    const val CHANNEL_NAME = "Default Notifications"
+    const val CHANNEL_DESCRIPTION = "General notifications for the app"
 
     // 初始化通知通道（仅需在应用启动时调用一次）
     fun initNotificationChannel(

@@ -16,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Diditakemymeds"
         tools:targetApi="31">
+        <service
+            android:name=".service.MedicineReminderService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="dataSync"></service>
 
         <activity
             android:name=".MainActivity"
