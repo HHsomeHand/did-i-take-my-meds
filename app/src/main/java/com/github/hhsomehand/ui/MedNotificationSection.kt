@@ -33,7 +33,10 @@ import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.openUrl
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.judemanutd.autostarter.AutoStartPermissionHelper
+import com.github.javiersantos.appupdater.enums.Display
 
 @Composable
 fun MedNotificationSection() {
@@ -180,6 +183,20 @@ fun MedNotificationSection() {
                     .fillMaxWidth()
             ) {
                 Text("英文说明书 & 开源地址")
+            }
+
+            CornOutlinedButton(
+                onClick = {
+                    AppUpdater(context)
+                        .setDisplay(Display.DIALOG)
+                        .setUpdateFrom(UpdateFrom.GITHUB)
+                        .setGitHubUserAndRepo("HHsomeHand", "did-i-take-my-meds")
+                        .start()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("从 GITHUB 检查更新")
             }
         }
     }

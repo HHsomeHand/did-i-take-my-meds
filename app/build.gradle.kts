@@ -66,4 +66,8 @@ dependencies({
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
 
     implementation("com.github.judemanutd:autostarter:1.1.0")
+
+    implementation("com.github.javiersantos:AppUpdater:2.7")
+
+
 })
