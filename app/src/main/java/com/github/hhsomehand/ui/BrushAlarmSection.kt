@@ -50,7 +50,7 @@ fun BrushAlarmSection() {
             onValueChange = { minInput = it },
 
         )
-        Text(text = "分钟, 开始闹钟")
+        Text(text = "分钟, 开始刷牙闹钟")
 
         Box(
             modifier = Modifier
