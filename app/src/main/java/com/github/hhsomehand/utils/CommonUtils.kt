@@ -24,7 +24,10 @@ fun openUrl(
     }
 }
 
-fun hideAppWindow(context: Context,isHide:Boolean){
+fun hideAppWindow(
+    isHide:Boolean,
+    context: Context = MyApplication.instance.applicationContext
+){
     try {
         val activityManager: ActivityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         //控制App的窗口是否在多任务列表显示

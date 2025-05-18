@@ -11,6 +11,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.MyApplication
+import com.github.hhsomehand.constant.LocalStorageConst.isHideApp
 import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.service.MedicineReminderService
 import com.github.hhsomehand.ui.component.CornNumberField
@@ -201,16 +203,8 @@ fun MedNotificationSection() {
 
 @Composable
 fun HideAppSection() {
-    var isHideApp by rememberSharedState("MedNotificationSection.isHideApp", false)
-
-    val context = LocalContext.current
-
-    LaunchedEffect(isHideApp) {
-        hideAppWindow(
-            context = context,
-            isHide = isHideApp
-        )
-    }
+    val viewModel: HomeViewModel = viewModel()
+    val isHideApp by viewModel.isHideApp.collectAsState()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -224,7 +218,7 @@ fun HideAppSection() {
         ) {
             Switch(
                 checked = isHideApp,
-                onCheckedChange = { isHideApp = it },
+                onCheckedChange = { viewModel.updateIsHideApp(it) },
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
             )

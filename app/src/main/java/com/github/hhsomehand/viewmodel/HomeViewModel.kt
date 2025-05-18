@@ -1,15 +1,24 @@
 package com.github.hhsomehand.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.hhsomehand.constant.LocalStorageConst
 import com.github.hhsomehand.dao.RecordStorage
 import com.github.hhsomehand.model.MedRecord
+import com.github.hhsomehand.utils.LocalStorage
 import com.github.hhsomehand.utils.SharedState
+import com.github.hhsomehand.utils.hideAppWindow
+import com.github.hhsomehand.utils.rememberSharedState
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -93,5 +102,21 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             _recordListUpdate.emit(index)
         }
+    }
+
+    var _isHideApp = MutableStateFlow(LocalStorage.get(LocalStorageConst.isHideApp))
+
+    val isHideApp = _isHideApp.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            isHideApp.collect {
+                hideAppWindow(it)
+            }
+        }
+    }
+
+    fun updateIsHideApp(l_isHideApp: Boolean) {
+        _isHideApp.value = l_isHideApp
     }
 }
