@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.app.ServiceCompat.startForeground
 import com.github.hhsomehand.MainActivity
 import com.github.hhsomehand.MyApplication
 import com.github.hhsomehand.R
@@ -15,8 +14,7 @@ import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.dao.RecordStorage
 import com.github.hhsomehand.utils.LogUtils
 import com.github.hhsomehand.utils.NotificationUtils
-import com.github.hhsomehand.utils.NotificationUtils.CHANNEL_ID
-import com.github.hhsomehand.utils.PrefsUtils
+import com.github.hhsomehand.utils.LocalStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -187,11 +185,11 @@ class MedicineReminderService : Service() {
         }
     }
 
-    fun getIsForeground(): Boolean = PrefsUtils.get(this, PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
+    fun getIsForeground(): Boolean = LocalStorage.get(this, PrefsConst.isForegroundKey, PrefsConst.isForegroundValue)
 
-    fun getHourInput(): Int = PrefsUtils.get(this, PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
+    fun getHourInput(): Int = LocalStorage.get(this, PrefsConst.hourInputKey, PrefsConst.hourInputDefault)
 
-    fun getMinToCheck(): Int = PrefsUtils.get(this, PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
+    fun getMinToCheck(): Int = LocalStorage.get(this, PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null // 不支持绑定

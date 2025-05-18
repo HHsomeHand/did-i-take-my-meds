@@ -3,7 +3,7 @@ package com.github.hhsomehand.utils
 import android.content.Context
 import com.github.hhsomehand.constant.PrefsConst
 
-object PrefsUtils {
+object LocalStorage {
     fun <T> get(context: Context, key: String, defaultValue: T): T {
         var prefs = context.getSharedPreferences(PrefsConst.appStoreName, Context.MODE_PRIVATE)
 
