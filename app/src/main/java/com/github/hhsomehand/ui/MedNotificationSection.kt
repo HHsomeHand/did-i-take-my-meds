@@ -31,6 +31,7 @@ import com.github.hhsomehand.ui.dialog.getDialogModifier
 import com.github.hhsomehand.ui.theme.ConfigRowHeight
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
+import com.github.hhsomehand.utils.hideAppWindow
 import com.github.hhsomehand.utils.openUrl
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
@@ -124,6 +125,8 @@ fun MedNotificationSection() {
                 }
             }
 
+            HideAppSection()
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = ConfigRowHeight
@@ -192,6 +195,39 @@ fun MedNotificationSection() {
             ) {
                 Text("英文说明书 & 开源地址")
             }
+        }
+    }
+}
+
+@Composable
+fun HideAppSection() {
+    var isHideApp by rememberSharedState("MedNotificationSection.isHideApp", false)
+
+    val context = LocalContext.current
+
+    LaunchedEffect(isHideApp) {
+        hideAppWindow(
+            context = context,
+            isHide = isHideApp
+        )
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        Text(text = "隐藏 App 窗口")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Switch(
+                checked = isHideApp,
+                onCheckedChange = { isHideApp = it },
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+            )
         }
     }
 }
