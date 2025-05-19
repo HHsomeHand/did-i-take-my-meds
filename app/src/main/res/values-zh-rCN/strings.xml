@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">吃药没?</string>
+    <string name="accessibility_service_description">提高服务优先级, 避免被后台清除</string>
 </resources>

@@ -31,6 +31,7 @@ import com.github.hhsomehand.ui.dialog.CornDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
 import com.github.hhsomehand.ui.dialog.getDialogModifier
 import com.github.hhsomehand.ui.theme.ConfigRowHeight
+import com.github.hhsomehand.utils.AccessibilityUtils
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
 import com.github.hhsomehand.utils.hideAppWindow
@@ -197,6 +198,8 @@ fun MedNotificationSection() {
             ) {
                 Text("英文说明书 & 开源地址")
             }
+
+            AccessibilitySection()
         }
     }
 }
@@ -222,6 +225,24 @@ fun HideAppSection() {
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
             )
+        }
+    }
+}
+
+
+@Composable
+fun AccessibilitySection() {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        CornOutlinedButton(
+            onClick = { AccessibilityUtils.openAccessibilitySettings() },
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text("打开无障碍权限设置")
         }
     }
 }

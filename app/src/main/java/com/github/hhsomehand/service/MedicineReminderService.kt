@@ -1,12 +1,17 @@
 package com.github.hhsomehand.service
 
+import android.accessibilityservice.AccessibilityService
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.view.accessibility.AccessibilityEvent
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat.startForeground
+import androidx.core.app.ServiceCompat.stopForeground
+import androidx.core.content.ContextCompat.startForegroundService
 import com.github.hhsomehand.MainActivity
 import com.github.hhsomehand.MyApplication
 import com.github.hhsomehand.R
@@ -28,7 +33,7 @@ import java.time.temporal.ChronoUnit
 
 private const val TAG = "MedicineReminderService"
 
-class MedicineReminderService : Service() {
+class MedicineReminderService : AccessibilityService() {
     private val scope =  CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val recordStorage = RecordStorage()
     private var reminderJob: Job? = null
@@ -191,7 +196,11 @@ class MedicineReminderService : Service() {
 
     fun getMinToCheck(): Int = LocalStorage.get(this, PrefsConst.minToCheckKey, PrefsConst.minToCheckValue)
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null // 不支持绑定
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        // 空实现，仅用于保持服务存活
+    }
+
+    override fun onInterrupt() {
+        // 空实现
     }
 }
