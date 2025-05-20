@@ -112,6 +112,8 @@ class HomeViewModel: ViewModel() {
         viewModelScope.launch {
             isHideApp.collect {
                 hideAppWindow(it)
+
+                LocalStorage.set(LocalStorageConst.isHideApp, it)
             }
         }
     }
