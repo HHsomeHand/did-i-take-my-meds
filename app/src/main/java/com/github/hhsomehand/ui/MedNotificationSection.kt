@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Switch
@@ -31,6 +33,7 @@ import com.github.hhsomehand.ui.dialog.CornDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
 import com.github.hhsomehand.ui.dialog.getDialogModifier
 import com.github.hhsomehand.ui.theme.ConfigRowHeight
+import com.github.hhsomehand.ui.theme.Spacing
 import com.github.hhsomehand.utils.AccessibilityUtils
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
@@ -113,7 +116,7 @@ fun MedNotificationSection() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = ConfigRowHeight
             ) {
-                Text(text = "是否启动前台服务来发通知")
+                Text(text = "是否启动前台服务")
 
                 Box(
                     modifier = Modifier
@@ -178,6 +181,7 @@ fun MedNotificationSection() {
                 Text("打开自启动设置")
             }
 
+
             CornOutlinedButton(
                 onClick = {
                     openUrl("https://gitee.com/HHandHsome/did-i-take-my-meds")
@@ -187,7 +191,6 @@ fun MedNotificationSection() {
             ) {
                 Text("中文说明书 & 开源地址")
             }
-
 
             CornOutlinedButton(
                 onClick = {
@@ -232,17 +235,11 @@ fun HideAppSection() {
 
 @Composable
 fun AccessibilitySection() {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = ConfigRowHeight
+    CornOutlinedButton(
+        onClick = { AccessibilityUtils.openAccessibilitySettings() },
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
-        CornOutlinedButton(
-            onClick = { AccessibilityUtils.openAccessibilitySettings() },
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text("打开无障碍权限设置")
-        }
+        Text("打开无障碍权限设置")
     }
 }
