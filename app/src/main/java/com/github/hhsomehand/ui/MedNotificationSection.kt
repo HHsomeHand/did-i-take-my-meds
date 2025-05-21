@@ -71,7 +71,7 @@ fun MedNotificationSection() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = ConfigRowHeight
     ) {
-        Text(text = "通过消息通知来提醒吃药")
+        Text(text = "本 App 会发消息提醒您吃药")
 
         Box(
             modifier = Modifier
