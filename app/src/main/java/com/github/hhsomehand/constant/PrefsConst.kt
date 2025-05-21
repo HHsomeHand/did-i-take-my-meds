@@ -6,7 +6,7 @@ object PrefsConst {
     const val appStoreName = "app"
 
     const val hourInputKey = "MedNotificationSection.hourInput"
-    const val hourInputDefault = 4
+    const val hourInputDefault = 3
 
     const val isNotificationKey = "MedNotificationSection.isNotification"
     const val isNotificationDefault = true
@@ -15,5 +15,5 @@ object PrefsConst {
     const val isForegroundValue = false
 
     const val minToCheckKey = "MedNotificationSection.minToCheck"
-    const val minToCheckValue = 5
+    const val minToCheckValue = 10
 }

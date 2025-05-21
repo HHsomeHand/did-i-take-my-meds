@@ -4,13 +4,16 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.hhsomehand.MyApplication
+import com.github.hhsomehand.constant.LocalStorageConst.isHideApp
 import com.github.hhsomehand.constant.PrefsConst
 import com.github.hhsomehand.service.MedicineReminderService
 import com.github.hhsomehand.ui.component.CornNumberField
@@ -29,8 +33,11 @@ import com.github.hhsomehand.ui.dialog.CornDialog
 import com.github.hhsomehand.ui.dialog.getDialogBoxModifier
 import com.github.hhsomehand.ui.dialog.getDialogModifier
 import com.github.hhsomehand.ui.theme.ConfigRowHeight
+import com.github.hhsomehand.ui.theme.Spacing
+import com.github.hhsomehand.utils.AccessibilityUtils
 import com.github.hhsomehand.utils.AlarmUtils
 import com.github.hhsomehand.utils.MedicationReminderWorker
+import com.github.hhsomehand.utils.hideAppWindow
 import com.github.hhsomehand.utils.openUrl
 import com.github.hhsomehand.utils.rememberSharedState
 import com.github.hhsomehand.viewmodel.HomeViewModel
@@ -64,7 +71,7 @@ fun MedNotificationSection() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = ConfigRowHeight
     ) {
-        Text(text = "通过消息通知来提醒吃药")
+        Text(text = "本 App 会发消息提醒您吃药")
 
         Box(
             modifier = Modifier
@@ -104,12 +111,11 @@ fun MedNotificationSection() {
             )
 
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = ConfigRowHeight
             ) {
-                Text(text = "是否启动前台服务来发通知")
+                Text(text = "是否启动前台服务")
 
                 Box(
                     modifier = Modifier
@@ -123,6 +129,8 @@ fun MedNotificationSection() {
                     )
                 }
             }
+
+            HideAppSection()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +157,7 @@ fun MedNotificationSection() {
                     onValueChange = { minToCheck = it },
                 )
 
-                Text(text = "分钟, 检查是否超时")
+                Text(text = "分钟, 检查是否要提醒")
             }
 
             Row(
@@ -172,6 +180,7 @@ fun MedNotificationSection() {
                 Text("打开自启动设置")
             }
 
+
             CornOutlinedButton(
                 onClick = {
                     openUrl("https://gitee.com/HHandHsome/did-i-take-my-meds")
@@ -182,7 +191,6 @@ fun MedNotificationSection() {
                 Text("中文说明书 & 开源地址")
             }
 
-
             CornOutlinedButton(
                 onClick = {
                     openUrl("https://github.com/HHsomeHand/did-i-take-my-meds")
@@ -192,6 +200,45 @@ fun MedNotificationSection() {
             ) {
                 Text("英文说明书 & 开源地址")
             }
+
+            AccessibilitySection()
         }
+    }
+}
+
+@Composable
+fun HideAppSection() {
+    val viewModel: HomeViewModel = viewModel()
+    val isHideApp by viewModel.isHideApp.collectAsState()
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = ConfigRowHeight
+    ) {
+        Text(text = "在任务栏中, 隐藏 App 窗口")
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Switch(
+                checked = isHideApp,
+                onCheckedChange = { viewModel.updateIsHideApp(it) },
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun AccessibilitySection() {
+    CornOutlinedButton(
+        onClick = { AccessibilityUtils.openAccessibilitySettings() },
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text("打开无障碍权限设置")
     }
 }

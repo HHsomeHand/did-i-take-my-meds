@@ -43,14 +43,14 @@ fun BrushAlarmSection() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = ConfigRowHeight
     ) {
-        Text(text = "吃药后, 隔")
+        Text(text = "吃药后, 开启")
 
         CornNumberField(
             value = minInput,
             onValueChange = { minInput = it },
 
         )
-        Text(text = "分钟, 开始刷牙闹钟")
+        Text(text = "分钟的刷牙倒计时")
 
         Box(
             modifier = Modifier
