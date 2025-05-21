@@ -2,6 +2,10 @@
 
 > 水果玉米没有特殊含义, 仅仅只是方便搜索的关键字, 来源于我的一顿早餐
 
+## 软件的功能
+
+快速记录服药信息，避免漏服或重复服药
+
 ## 下载地址
 
 gitee release: https://gitee.com/HHandHsome/did-i-take-my-meds/releases/tag/v1.1.2
@@ -45,6 +49,20 @@ github release: https://github.com/HHsomeHand/did-i-take-my-meds/releases/tag/v1
 > https://mp.weixin.qq.com/template/article/1747807756/index.html
 >
 > 前台服务不是金钥匙, 在睡眠或省电模式下依旧会被杀掉, 只有无障碍才能完全保活
+
+### 获取更新
+
+为了保证软件完全离线，所以没有加入自动更新机制。
+
+同时，国内的应用市场上架APP，都需要软件著作权。
+
+而注册软件著作权需要 200 块，实在是没有必要。
+
+所以本软件弄了一个交流群，方便大家获取更新信息。
+
+群号: 1038206078
+
+加群暗号: 123456
 
 ## 介绍 & 软件的灵感来源
 
