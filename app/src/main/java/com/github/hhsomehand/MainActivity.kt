@@ -130,7 +130,7 @@ fun HomeScreen() {
         Column(
             Modifier
                 .align(Alignment.Center)
-                .padding(horizontal = 25.dp)
+                .padding(horizontal = 24.dp)
         ) {
             RecordSection()
 
