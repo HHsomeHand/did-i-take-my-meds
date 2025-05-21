@@ -111,7 +111,6 @@ fun MedNotificationSection() {
             )
 
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = ConfigRowHeight
@@ -158,7 +157,7 @@ fun MedNotificationSection() {
                     onValueChange = { minToCheck = it },
                 )
 
-                Text(text = "分钟, 检查是否超时")
+                Text(text = "分钟, 检查是否要提醒")
             }
 
             Row(
@@ -216,7 +215,7 @@ fun HideAppSection() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = ConfigRowHeight
     ) {
-        Text(text = "隐藏 App 窗口")
+        Text(text = "在任务栏中, 隐藏 App 窗口")
 
         Box(
             modifier = Modifier
