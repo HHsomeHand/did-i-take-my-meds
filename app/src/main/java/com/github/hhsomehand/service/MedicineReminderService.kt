@@ -153,7 +153,7 @@ class MedicineReminderService : AccessibilityService() {
 
                     NotificationUtils.sendSingleNotification(
                         title = "用药提醒",
-                        message = "距离上次用药已过去${timeDiffFmt}，请考虑服药！",
+                        message = "${timeDiffFmt}，请考虑服药！",
                         context = applicationContext
                     )
                 } else {
